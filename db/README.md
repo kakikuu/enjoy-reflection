@@ -23,21 +23,16 @@ conference_records ||--|| canseled_reserved_conference_records: ""
 conference_records ||--o| started_conference_records: ""
 conference_records ||--o| closed_conference_records: ""
 reserved_conference_records ||--o| canseled_reserved_conference_records: ""
-
 questions ||--o{ answers: ""
-
-
   users {
     bigint id PK
     string user_name
   }
-
   projects {
     int id PK
     references user FK
     string project_title
   }
-
   personal_reflections {
     int personal_reflection_id PK
     references user_id FK
@@ -45,37 +40,31 @@ questions ||--o{ answers: ""
     text title
     text contents
   }
-
   conference_records {
     int conference_record_id PK
     references project_id FK
     references personal_reflection_id FK
   }
-
   questions {
     bigint question_id PK
     references conference_record_id FK
     references contents
     }
-
   answers {
     bigint answer_id PK
     references question_id FK
     references contents
   }
-
   join_members{
     int id PK
     int project_id FK
     int user_id FK
   }
-
   left_members{
     int id PK
     int project_id FK
     int user_id FK
   }
-
   created_projects {
     int id PK
     references project_id FK
@@ -124,9 +113,6 @@ questions ||--o{ answers: ""
     int id PK
     references conference_record_id FK
   }
-
-
-
 ```
 
 ---
