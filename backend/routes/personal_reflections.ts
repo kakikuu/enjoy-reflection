@@ -48,12 +48,6 @@ router.post("/", async (req, res) => {
     reflection_content_P,
     reflection_content_T,
   } = req.body;
-  console.log("user_id", user_id);
-  console.log("project_id", project_id);
-  console.log("reflection_title", reflection_title);
-  console.log("reflection_content_K", reflection_content_K);
-  console.log("reflection_content_P", reflection_content_P);
-  console.log("reflection_content_T", reflection_content_T);
 
   try {
     const { data, error } = await supabaseClient
@@ -85,4 +79,45 @@ router.post("/", async (req, res) => {
     });
   }
 });
+
+router.get("/personal-reflections-details/:conference_id", async (req, res) => {
+  const { conference_id } = req.params;
+  // console.log(conference_id);
+
+  try {
+    // まず、conference_id から personal_id を取得
+    const conferenceResult = await supabaseClient
+      .from("conference_records")
+      .select("personal_reflection_id")
+      .eq("conference_record_id", conference_id)
+      .select();
+
+    if (conferenceResult.error || !conferenceResult.data) {
+      throw new Error("Conference record not found");
+    }
+
+    // todo: data[0]だとconference内に記事が1つを前提にしているが、今後は複数を可能にするため、番号も指定する
+    const personalId = conferenceResult.data[0].personal_reflection_id;
+    console.log(personalId);
+    const personalReflectionsResult = await supabaseClient
+      .from("personal_reflections")
+      .select("title, content_K, content_P, content_T")
+      .eq("personal_reflection_id", personalId);
+    if (personalReflectionsResult.error) {
+      throw personalReflectionsResult.error;
+    }
+    console.log(personalReflectionsResult.data);
+
+    res.json({
+      message: "Personal reflections details retrieved successfully",
+      details: personalReflectionsResult.data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to retrieve personal reflections details",
+      error: error.message,
+    });
+  }
+});
+
 module.exports = router;
