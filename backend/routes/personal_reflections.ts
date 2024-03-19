@@ -39,4 +39,50 @@ router.get("/", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+router.post("/", async (req, res) => {
+  const { user_id, project_id } = req.params;
+  const {
+    reflection_title,
+    reflection_content_K,
+    reflection_content_P,
+    reflection_content_T,
+  } = req.body;
+  console.log("user_id", user_id);
+  console.log("project_id", project_id);
+  console.log("reflection_title", reflection_title);
+  console.log("reflection_content_K", reflection_content_K);
+  console.log("reflection_content_P", reflection_content_P);
+  console.log("reflection_content_T", reflection_content_T);
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("personal_reflections")
+      .insert([
+        {
+          user_id: user_id,
+          project_id: project_id,
+          title: reflection_title,
+          content_K: reflection_content_K,
+          content_P: reflection_content_P,
+          content_T: reflection_content_T,
+        },
+      ])
+      .select();
+
+    if (error) {
+      throw error;
+    }
+
+    res.status(201).json({
+      message: "Personal reflection added successfully",
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to add personal reflection",
+      error: error.message,
+    });
+  }
+});
 module.exports = router;

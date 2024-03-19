@@ -6,7 +6,6 @@ let indexRouter = require("./routes/index.ts");
 let usersRouter = require("./routes/users.ts");
 let projectsRouter = require("./routes/projects.ts");
 let personalReflectionsRouter = require("./routes/personal_reflections.ts");
-let createProjectsRouter = require("./routes/create_projects.ts");
 
 const dotenv = require("dotenv");
 
@@ -28,8 +27,6 @@ app.use(
   "/users/:user_id/projects/:project_id/personal-reflections",
   personalReflectionsRouter
 );
-app.use("/users/:user_id/create-projects", createProjectsRouter);
-
 app.use(function (req, res, next) {
   next(createError(404));
 });
