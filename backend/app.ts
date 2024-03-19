@@ -6,6 +6,7 @@ let indexRouter = require("./routes/index.ts");
 let usersRouter = require("./routes/users.ts");
 let projectsRouter = require("./routes/projects.ts");
 let personalReflectionsRouter = require("./routes/personal_reflections.ts");
+let createProjectsRouter = require("./routes/create_projects.ts");
 
 const dotenv = require("dotenv");
 
@@ -27,6 +28,7 @@ app.use(
   "/users/:user_id/projects/:project_id/personal-reflections",
   personalReflectionsRouter
 );
+app.use("/users/:user_id/create-projects", createProjectsRouter);
 
 app.use(function (req, res, next) {
   next(createError(404));
@@ -36,8 +38,6 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
   res.status(err.status || 500);
   res.render("error"); // エラーが発生した際にエラービューをレンダリングする
 });
