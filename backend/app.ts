@@ -5,6 +5,7 @@ let logger = require("morgan");
 let indexRouter = require("./routes/index.ts");
 let usersRouter = require("./routes/users.ts");
 let projectsRouter = require("./routes/projects.ts");
+let personalReflectionsRouter = require("./routes/personal_reflections.ts");
 
 const dotenv = require("dotenv");
 
@@ -22,6 +23,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/users/:user_id/projects", projectsRouter);
+app.use(
+  "/users/:user_id/projects/:project_id/personal-reflections",
+  personalReflectionsRouter
+);
 
 app.use(function (req, res, next) {
   next(createError(404));
