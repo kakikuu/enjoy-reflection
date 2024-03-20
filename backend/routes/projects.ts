@@ -12,10 +12,6 @@ const getProject = async (userId) => {
     .from("projects")
     .select("*")
     .eq("user_id", userId);
-
-  // console.log("getProject");
-  // console.log(peojects.data);
-  // console.log("------");
   return peojects.data;
 };
 
