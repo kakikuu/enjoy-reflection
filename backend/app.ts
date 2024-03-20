@@ -43,7 +43,7 @@ app.use(
 );
 
 app.use(
-  "/users/:user_id/projects/:project_id/conference-records",
+  "/users/:user_id/projects/:project_id/conference-records/:conference_id",
   conferenceRecordsRouter
 );
 
