@@ -8,6 +8,7 @@ let projectsRouter = require("./routes/projects.ts");
 let personalReflectionsRouter = require("./routes/personal_reflections.ts");
 let conferenceRecordsRouter = require("./routes/conference_records.ts");
 let questionsRouter = require("./routes/questions.ts");
+let answersRouter = require("./routes/answers.ts");
 
 const dotenv = require("dotenv");
 
@@ -29,6 +30,11 @@ app.use("/users/:user_id/projects", projectsRouter);
 app.use(
   "/users/:user_id/projects/:project_id/personal-reflections",
   personalReflectionsRouter
+);
+
+app.use(
+  "/users/:user_id/projects/:project_id/conference-records/:conference_id/questions/:question_id/answers",
+  answersRouter
 );
 
 app.use(
