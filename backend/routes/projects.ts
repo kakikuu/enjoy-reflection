@@ -7,30 +7,51 @@ const createAuthCode = () => {
   return Math.random().toString(36).substring(2, 8);
 };
 
-const getProject = async (userId) => {
-  const peojects = await supabaseClient
-    .from("projects")
-    .select("*")
-    .eq("user_id", userId);
-  return peojects.data;
-};
-
 router.get("/", async function (req, res, next) {
-  // ユーザーIDを取得
-  const userId = req.params.user_id;
-  // userIdを数字に変換
-  console.log(userId);
+  // URLパラメータからユーザーIDを取得
+  const user_clerk_id = req.params.user_clerk_id;
+  console.log(user_clerk_id);
 
-  console.log("getAllTodosが呼ばれました");
-  const projects = await getProject(userId);
-  console.log(projects);
-  // プロジェクトのデータをレスポンスとして返す
-  res.json(projects);
+  try {
+    // ユーザー情報の取得
+    const { data: userInfoData, error: userInfoError } = await supabaseClient
+      .from("users")
+      .select("*")
+      .eq("user_clerk_id", user_clerk_id)
+      .single(); // 単一のレコードを取得
+
+    if (userInfoError) throw userInfoError;
+    if (!userInfoData)
+      return res.status(404).json({ message: "User not found" });
+
+    // userInfoDataからuser_idを取得
+    const user_id = userInfoData.user_id;
+
+    // user_idを使用してプロジェクト情報を取得
+    const { data: projectsData, error: projectsError } = await supabaseClient
+      .from("projects")
+      .select("*")
+      .eq("user_id", user_id);
+
+    if (projectsError) throw projectsError;
+
+    // プロジェクトのデータをレスポンスとして返す
+    res.json(projectsData);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch data", error: error.message });
+  }
 });
 
 router.post("/", async (req, res) => {
   const { project_title } = req.body;
-  const user_id = req.params.user_id;
+  const user_ckerk_id = req.params.user_clerk_id;
+  const user_id = supabaseClient
+    .from("users")
+    .select("user_id")
+    .eq("user_ckerk_id", user_ckerk_id);
   // projectsテーブルにプロジェクトを追加
   const projectInsertResult = await supabaseClient
     .from("projects")
