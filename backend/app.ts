@@ -1,5 +1,6 @@
 let createError = require("http-errors");
 let express = require("express");
+const cors = require("cors");
 let path = require("path");
 let logger = require("morgan");
 let indexRouter = require("./routes/index.ts");
@@ -14,7 +15,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 let app = express();
-
+app.use(cors());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
@@ -25,25 +26,25 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-app.use("/users/:user_id/projects", projectsRouter);
+app.use("/users/:user_clerk_id/projects", projectsRouter);
 
 app.use(
-  "/users/:user_id/projects/:project_id/personal-reflections",
+  "/users/:user_clerk_id/projects/:project_id/personal-reflections",
   personalReflectionsRouter
 );
 
 app.use(
-  "/users/:user_id/projects/:project_id/conference-records/:conference_id/questions/:question_id/answers",
+  "/users/:user_clerk_id/projects/:project_id/conference-records/:conference_id/questions/:question_id/answers",
   answersRouter
 );
 
 app.use(
-  "/users/:user_id/projects/:project_id/conference-records/:conference_id/questions",
+  "/users/:user_clerk_id/projects/:project_id/conference-records/:conference_id/questions",
   questionsRouter
 );
 
 app.use(
-  "/users/:user_id/projects/:project_id/conference-records/:conference_id",
+  "/users/:user_clerk_id/projects/:project_id/conference-records/:conference_id",
   conferenceRecordsRouter
 );
 

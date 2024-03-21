@@ -4,19 +4,21 @@
 import React, { useEffect, useState } from "react";
 import { auth } from "@clerk/nextjs";
 
-export const Projects: React.FC<{ userId: string }> = ({ userId }) => {
+export const ViewProjects: React.FC<{ user_clerk_id: string }> = ({
+  user_clerk_id,
+}) => {
   const [projects, setProjects] = React.useState<any[]>([]);
-  console.log(userId);
+  console.log(user_clerk_id);
   React.useEffect(() => {
     const fetchProjects = async () => {
-      const response = await fetch(`http://localhost:3001/${userId}/projects`);
+      const response = await fetch(
+        `http://localhost:3001/users/${user_clerk_id}/projects`
+      );
       const data = await response.json();
-      console.log("hoge");
-      console.log(data);
       setProjects(data);
     };
     fetchProjects();
-  }, [userId]);
+  }, [user_clerk_id]);
 
   return (
     <div>
