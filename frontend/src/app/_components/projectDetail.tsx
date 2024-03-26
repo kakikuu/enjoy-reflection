@@ -9,7 +9,7 @@ const ProjectDetail: React.FC<{ projectId: string | string[] }> = ({
   console.log("project", projectId);
 
   useEffect(() => {
-    if (!projectId || !user?.id) return; // プロジェクトIDがない場合やユーザーIDがない場合は何もしない
+    if (!projectId || !user?.id) return;
 
     // APIエンドポイントからプロジェクトの詳細を取得
     const fetchProject = async () => {

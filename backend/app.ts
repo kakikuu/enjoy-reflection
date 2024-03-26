@@ -44,7 +44,7 @@ app.use(
 );
 
 app.use(
-  "/users/:user_clerk_id/projects/:project_id/conference-records/:conference_id",
+  "/users/:user_clerk_id/projects/:project_id/conference-records",
   conferenceRecordsRouter
 );
 

@@ -32,6 +32,32 @@ router.get("/join-members/:conference_id", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  const { project_id } = req.params;
+  console.log("project_id", project_id);
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("conference_records")
+      .select("conference_record_id")
+      .eq("project_id", project_id);
+
+    if (error) {
+      throw error;
+    }
+
+    res.json({
+      message: "Conference IDs retrieved successfully",
+      conference_ids: data.map((record) => record.conference_record_id),
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to retrieve user IDs",
+      error: error.message,
+    });
+  }
+});
+
 router.post("/", async (req, res) => {
   const { conference_id } = req.params;
   const invite_id = generateUniqueId(); // invite_id の生成
