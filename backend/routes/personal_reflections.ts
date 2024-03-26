@@ -82,10 +82,8 @@ router.post("/", async (req, res) => {
 
 router.get("/personal-reflections-details/:conference_id", async (req, res) => {
   const { conference_id } = req.params;
-  // console.log(conference_id);
 
   try {
-    // まず、conference_id から personal_id を取得
     const conferenceResult = await supabaseClient
       .from("conference_records")
       .select("personal_reflection_id")

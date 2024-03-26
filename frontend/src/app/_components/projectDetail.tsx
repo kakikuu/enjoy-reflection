@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 
-const ProjectDetail: React.FC<{ projectId: string }> = ({ projectId }) => {
+const ProjectDetail: React.FC<{ projectId: string | string[] }> = ({
+  projectId,
+}) => {
   const { user } = useUser();
   const [project, setProject] = useState(null);
+  console.log("project", projectId);
 
   useEffect(() => {
     if (!projectId || !user?.id) return; // プロジェクトIDがない場合やユーザーIDがない場合は何もしない
@@ -15,6 +18,7 @@ const ProjectDetail: React.FC<{ projectId: string }> = ({ projectId }) => {
       );
       const data = await response.json();
       setProject(data);
+      console.log("projectだぜ", data);
     };
 
     fetchProject();

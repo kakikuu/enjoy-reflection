@@ -1,19 +1,20 @@
+// src/app/project/[projectId]/page.tsx
 "use client";
-
+import React from "react";
+import { useParams } from "next/navigation";
 import ProjectDetail from "@/app/_components/projectDetail";
 
-// loader関数をエクスポートして、サーバーサイドでパラメータを取得し、ページコンポーネントにpropsとして渡します。
-export async function loader({ params }) {
-  console.log("param", params);
-  return { props: { projectId: params.projectId } };
-}
+function ProjectPage() {
+  const params = useParams();
+  const projectId = params.projectId;
+  console.log(projectId);
 
-const Page = ({ projectId }) => {
   return (
     <div>
+      <h1>Project Page</h1>
       <ProjectDetail projectId={projectId} />
     </div>
   );
-};
+}
 
-export default Page;
+export default ProjectPage;
