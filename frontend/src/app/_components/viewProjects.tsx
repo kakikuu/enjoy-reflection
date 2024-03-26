@@ -1,8 +1,7 @@
 "use client";
 
 // エンドポイントにアクセスして、プロジェクトの一覧を取得する
-import React, { useEffect, useState } from "react";
-import { auth } from "@clerk/nextjs";
+import React from "react";
 
 export const ViewProjects: React.FC<{ user_clerk_id: string }> = ({
   user_clerk_id,
