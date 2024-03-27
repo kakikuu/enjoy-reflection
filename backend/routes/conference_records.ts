@@ -2,7 +2,6 @@ const { supabaseClient } = require("../config/supabase.ts");
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 
-// ID生成のための仮の関数
 function generateUniqueId() {
   return Math.random().toString(36).substr(2, 9);
 }
@@ -33,6 +32,7 @@ router.get("/join-members/:conference_id", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+  // 各プロジェクトに紐づく conference_record_id を取得
   const { project_id } = req.params;
   console.log("project_id", project_id);
 
