@@ -72,8 +72,8 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const { user_clerk_id, project_id } = req.params;
-  console.log("hogeee");
+  console.log("gettttt");
+  const { user_clerk_id } = req.params;
   try {
     const { data: userData, error: userError } = await supabaseClient
       .from("users")
@@ -83,18 +83,19 @@ router.get("/", async (req, res) => {
     if (userError) throw new Error(userError.message);
     if (!userData) throw new Error("User not found");
     const user_id = userData[0].user_id;
-    console.log("user_id", user_id);
+
     // projectsテーブルからプロジェクトを取得
     const { data: projectData, error: projectError } = await supabaseClient
       .from("projects")
-      .select()
-      .eq("project_id", project_id)
+      .select("*")
       .eq("user_id", user_id);
+
+    console.log("projectData", projectData);
 
     if (projectError) throw new Error(projectError.message);
     if (!projectData) throw new Error("Project not found");
 
-    res.status(200).json(projectData[0]);
+    res.status(200).json(projectData);
   } catch (error) {
     console.error("Error:", error);
     res
