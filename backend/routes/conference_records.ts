@@ -2,7 +2,6 @@ const { supabaseClient } = require("../config/supabase.ts");
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 
-// ID生成のための仮の関数
 function generateUniqueId() {
   return Math.random().toString(36).substr(2, 9);
 }
@@ -23,6 +22,33 @@ router.get("/join-members/:conference_id", async (req, res) => {
     res.json({
       message: "User IDs retrieved successfully",
       user_ids: data.map((record) => record.user_id),
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to retrieve user IDs",
+      error: error.message,
+    });
+  }
+});
+
+router.get("/", async (req, res) => {
+  // 各プロジェクトに紐づく conference_record_id を取得
+  const { project_id } = req.params;
+  console.log("project_id", project_id);
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("conference_records")
+      .select("conference_record_id")
+      .eq("project_id", project_id);
+
+    if (error) {
+      throw error;
+    }
+
+    res.json({
+      message: "Conference IDs retrieved successfully",
+      conference_ids: data.map((record) => record.conference_record_id),
     });
   } catch (error) {
     res.status(500).json({

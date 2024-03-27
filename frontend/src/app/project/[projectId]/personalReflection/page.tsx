@@ -6,7 +6,6 @@ import { useUser, UserButton } from "@clerk/nextjs";
 export default function Page() {
   const params = useParams();
   const projectId = params.projectId;
-  // const router = useRouter();
   const { isSignedIn, user } = useUser();
   console.log(user);
   return (

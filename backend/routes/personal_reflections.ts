@@ -3,15 +3,12 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 
 const getPersonalReflection = async (userId, projectId) => {
+  // プロジェクトに属する個人の反省を取得
   const personalReflections = await supabaseClient
     .from("personal_reflections")
     .select("*")
     .eq("user_id", userId)
     .eq("project_id", projectId);
-
-  console.log("personalReflections");
-  console.log(personalReflections.data);
-  console.log("------");
 
   const conferenceRecordsData = await supabaseClient
     .from("conference_records")
@@ -28,6 +25,7 @@ const getPersonalReflection = async (userId, projectId) => {
 };
 
 router.get("/", async (req, res) => {
+  // プロジェクトに属する個人の反省を取得
   const userId = req.params.user_id;
   const projectId = req.params.project_id;
 
@@ -81,6 +79,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/personal-reflections-details/:conference_id", async (req, res) => {
+  // 記者会見に紐づく個人反省記事を取得
   const { conference_id } = req.params;
 
   try {
@@ -96,7 +95,7 @@ router.get("/personal-reflections-details/:conference_id", async (req, res) => {
 
     // todo: data[0]だとconference内に記事が1つを前提にしているが、今後は複数を可能にするため、番号も指定する
     const personalId = conferenceResult.data[0].personal_reflection_id;
-    console.log(personalId);
+
     const personalReflectionsResult = await supabaseClient
       .from("personal_reflections")
       .select("title, content_K, content_P, content_T")

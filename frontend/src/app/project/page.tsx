@@ -1,10 +1,13 @@
 "use client";
 
 import { useUser, UserButton } from "@clerk/nextjs";
+import { useParams } from "next/navigation";
 import CreateProject from "../_components/createProject";
+import ConferencePage from "../_components/viewConference";
 
 export default function Page() {
   const { user } = useUser();
+
   return (
     <div>
       <UserButton />
