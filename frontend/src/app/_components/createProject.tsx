@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 const CreateProject: React.FC<{ user_clerk_id: string }> = ({
   user_clerk_id,

@@ -10,6 +10,7 @@ let personalReflectionsRouter = require("./routes/personal_reflections.ts");
 let conferenceRecordsRouter = require("./routes/conference_records.ts");
 let questionsRouter = require("./routes/questions.ts");
 let answersRouter = require("./routes/answers.ts");
+let testRouter = require("./routes/test.ts");
 
 const dotenv = require("dotenv");
 
@@ -25,7 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+
 app.use("/users/:user_clerk_id/projects", projectsRouter);
 
 app.use(

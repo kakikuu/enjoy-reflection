@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation'
-import { useUser, UserButton } from '@clerk/nextjs';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useUser, UserButton } from "@clerk/nextjs";
 import { ViewProjects } from "./_components/viewProjects";
-import { Button } from "./_components/ui/Button";
-import Link from 'next/link';
-
+import Link from "next/link";
 
 export default function Page() {
   const router = useRouter();
@@ -15,11 +13,9 @@ export default function Page() {
   // ユーザーがログインしていない場合はログインページにリダイレクト
   useEffect(() => {
     if (!isSignedIn) {
-      router.push('/sign-in');
+      router.push("/sign-in");
     }
   }, [isSignedIn, router]);
-
-
 
   return (
     <div>
