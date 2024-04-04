@@ -3,17 +3,22 @@
 import PersonalReferencePage from "../../../../_components/viewPersonalRefelection";
 import { useParams } from "next/navigation";
 import { useUser, useSignIn } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function ConferenceRecordPage() {
   const params = useParams();
-  console.log(params);
   const { user } = useUser();
-  console.log(user);
   const signIn = useSignIn();
-  console.log(signIn);
+  const router = useRouter();
 
   const projectId = params.projectId;
   const conferenceRecordId = params.conferenceRecordId;
+
+  function QuestionPage() {
+    router.push(
+      `/project/${projectId}/conferenceRecord/${conferenceRecordId}/question`
+    );
+  }
   return (
     <div>
       <h1>Conference Record Page</h1>
@@ -24,6 +29,7 @@ export default function ConferenceRecordPage() {
           conferenceRecordId={conferenceRecordId}
         />
       )}
+      <button onClick={QuestionPage}>質疑応答に進む</button>
       {!user && <p>Please sign in to view this page.</p>}
     </div>
   );

@@ -3,8 +3,8 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 
 router.post("/", async (req, res) => {
-  console.log("hoge");
-  const { user_id } = req.params;
+  const { user_clerk_id } = req.params;
+  console.log("user_id", user_clerk_id);
   const { conference_id } = req.params;
   const { question_content } = req.body;
 
@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
         {
           conference_record_id: conference_id,
           content: question_content,
-          user_id: user_id,
+          user_id: user_clerk_id,
         },
       ])
       .select();
