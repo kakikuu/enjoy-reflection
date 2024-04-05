@@ -2,18 +2,34 @@ const { supabaseClient } = require("../config/supabase.ts");
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 
-const getPersonalReflection = async (userId, projectId) => {
+const getPersonalReflection = async (user_clerk_id, projectId) => {
   // プロジェクトに属する個人の反省を取得
+  console.log("userId", user_clerk_id);
+  console.log("projectId", projectId);
+
+  const { data: userData, error: userError } = await supabaseClient
+    .from("users")
+    .select("user_id")
+    .eq("user_clerk_id", user_clerk_id);
+  console.log("userData", userData);
+
+  if (userError) throw new Error(userError.message);
+  if (!userData) throw new Error("User not found");
+  const user_id = userData[0].user_id;
+
   const personalReflections = await supabaseClient
     .from("personal_reflections")
     .select("*")
-    .eq("user_id", userId)
+    .eq("user_id", user_id)
     .eq("project_id", projectId);
 
   const conferenceRecordsData = await supabaseClient
     .from("conference_records")
     .select("*")
     .eq("project_id", projectId);
+
+  console.log(personalReflections.data);
+  console.log("------");
   console.log("conferenceRecordsData");
   console.log(conferenceRecordsData.data);
   console.log("------");
@@ -26,7 +42,7 @@ const getPersonalReflection = async (userId, projectId) => {
 
 router.get("/", async (req, res) => {
   // プロジェクトに属する個人の反省を取得
-  const userId = req.params.user_id;
+  const userId = req.params.user_clerk_id;
   const projectId = req.params.project_id;
 
   try {
@@ -116,5 +132,46 @@ router.get("/personal-reflections-details/:conference_id", async (req, res) => {
     });
   }
 });
+
+router.get(
+  "/personal-reflections-details/:personal_reflection_id",
+  async (req, res) => {
+    // 記者会見に紐づく個人反省記事を取得
+    const { personal_reflection_id } = req.params;
+
+    try {
+      const personalReflectionData = await supabaseClient
+        .from("conference_records")
+        .select("*")
+        .eq("conference_record_id", personal_reflection_id)
+        .select();
+
+      if (personalReflectionData.error || !personalReflectionData.data) {
+        throw new Error("Conference record not found");
+      }
+
+      const personalId = personalReflectionData.data[0].personal_reflection_id;
+
+      const personalReflectionsResult = await supabaseClient
+        .from("personal_reflections")
+        .select("title, content_K, content_P, content_T")
+        .eq("personal_reflection_id", personalId);
+      if (personalReflectionsResult.error) {
+        throw personalReflectionsResult.error;
+      }
+      console.log(personalReflectionsResult.data);
+
+      res.json({
+        message: "Personal reflections details retrieved successfully",
+        details: personalReflectionsResult.data,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Failed to retrieve personal reflections details",
+        error: error.message,
+      });
+    }
+  }
+);
 
 module.exports = router;

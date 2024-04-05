@@ -86,7 +86,7 @@ router.get("/", async (req, res) => {
       .select("user_id")
       .eq("user_clerk_id", user_clerk_id)
       .select();
-
+    console.log("userData", userData);
     if (userError) throw userError;
 
     let user_id;
@@ -100,12 +100,13 @@ router.get("/", async (req, res) => {
 
       if (newUserError) throw newUserError;
 
-      user_id = newUser.user_id;
+      user_id = newUser[0].user_id;
 
       // 新しいユーザーが作成されたため、関連するプロジェクトはない
       res.status(200).json([]);
     } else {
-      user_id = userData.user_id;
+      user_id = userData[0].user_id;
+      console.log("user_id", user_id);
 
       // user_idに基づいてプロジェクトを取得
       const { data: projectData, error: projectError } = await supabaseClient
@@ -121,6 +122,38 @@ router.get("/", async (req, res) => {
     }
   } catch (error) {
     console.error("Error:", error.message);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+router.get("/:project_id", async (req, res) => {
+  const { user_clerk_id, project_id } = req.params;
+  console.log("hogeee");
+  try {
+    const { data: userData, error: userError } = await supabaseClient
+      .from("users")
+      .select("user_id")
+      .eq("user_clerk_id", user_clerk_id);
+
+    if (userError) throw new Error(userError.message);
+    if (!userData) throw new Error("User not found");
+    const user_id = userData[0].user_id;
+    console.log("user_id", user_id);
+    // projectsテーブルからプロジェクトを取得
+    const { data: projectData, error: projectError } = await supabaseClient
+      .from("projects")
+      .select("project_title")
+      .eq("project_id", project_id)
+      .eq("user_id", user_id);
+
+    if (projectError) throw new Error(projectError.message);
+    if (!projectData) throw new Error("Project not found");
+
+    res.status(200).json(projectData[0]);
+  } catch (error) {
+    console.error("Error:", error);
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
