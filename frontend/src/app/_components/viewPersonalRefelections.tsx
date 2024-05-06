@@ -33,8 +33,6 @@ const ViewPersonalReflections = ({ userClerkId, projectId }) => {
   }, [userClerkId, projectId]);
   return (
     <div>
-      <h2>Personal Reflections</h2>
-
       {personalReflections.map((reflection) => (
         <button
           key={reflection.personal_reflection_id}

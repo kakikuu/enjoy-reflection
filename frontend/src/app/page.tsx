@@ -20,7 +20,6 @@ export default function Page() {
   return (
     <div>
       <UserButton />
-      {/* <Button text="プロジェクト作成" onClick={createProject} /> */}
       <Link href="/project">プロジェクトを作成</Link>
       {isSignedIn && (
         <div className="my-16 flex flex-col items-center">
