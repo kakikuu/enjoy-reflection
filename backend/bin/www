@@ -50,6 +50,28 @@ supabaseClient
   )
   .subscribe();
 
+// Supabaseのリアルタイム変更を購読
+supabaseClient
+  .channel("answers")
+  .on(
+    "postgres_changes",
+    {
+      event: "*", // INSERT, UPDATE, DELETEのどれか
+      schema: "public",
+      table: "answers",
+    },
+    (payload) => {
+      console.log("Change received!", payload);
+      // WebSocketを通じて全クライアントに変更を通知
+      wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify(payload));
+        }
+      });
+    }
+  )
+  .subscribe();
+
 function normalizePort(val) {
   var port = parseInt(val, 10);
 

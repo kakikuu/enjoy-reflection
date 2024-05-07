@@ -3,7 +3,9 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 
 const getPersonalReflection = async (user_clerk_id, projectId) => {
+
   // プロジェクトに関するデータ(個人反省・記者会見)を取得
+
   console.log("userId", user_clerk_id);
   console.log("projectId", projectId);
 
@@ -23,6 +25,7 @@ const getPersonalReflection = async (user_clerk_id, projectId) => {
     .from("personal_reflections")
     .select("*")
     .eq("user_id", user_id)
+
     .eq("project_id", projectId)
     .select();
 

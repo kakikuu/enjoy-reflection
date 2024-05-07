@@ -1,3 +1,7 @@
+// 特定の記者会見と結びついている個人反省記事を取得するためのコンポーネント
+// → このコンポーネントは、記者会見の詳細ページで使用される
+
+//今は、1つの反省記事に1つの記者会見になっている
 import React, { useEffect, useState } from "react";
 
 const PersonalReferencePage = ({

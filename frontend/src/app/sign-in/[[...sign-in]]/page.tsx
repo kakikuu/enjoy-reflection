@@ -1,3 +1,6 @@
+"use client";
+import React, { useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
 import { SignIn } from "@clerk/nextjs";
 
 export default function Page() {

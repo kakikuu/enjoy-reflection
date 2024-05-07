@@ -5,18 +5,19 @@ import { useParams } from "next/navigation";
 import ProjectDetail from "@/app/_components/projectDetail";
 import { useRouter } from "next/navigation";
 import ConferencePage from "../../_components/viewConference";
+import ViewPersonalReflections from "../../_components/viewPersonalRefelections";
 
 function ProjectPage() {
   const { user } = useUser();
   const router = useRouter();
   const params = useParams();
+
   const projectId = params.projectId;
   console.log(projectId);
 
   return (
     <div>
       <UserButton />
-      <h1>Project Page</h1>
       <ProjectDetail projectId={projectId} />
       <div>
         <button onClick={() => router.push(`/project`)}>
@@ -29,7 +30,13 @@ function ProjectPage() {
       </div>
       <div>　　　　　　　</div>
       {user && (
-        <ConferencePage user_clerk_id={user.id} project_id={projectId} />
+        <div>
+          <ViewPersonalReflections
+            userClerkId={user.id}
+            projectId={projectId}
+          />
+          <ConferencePage user_clerk_id={user.id} project_id={projectId} />
+        </div>
       )}
     </div>
   );
