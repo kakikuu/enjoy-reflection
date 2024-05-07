@@ -18,6 +18,16 @@ function ProjectPage() {
       <UserButton />
       <h1>Project Page</h1>
       <ProjectDetail projectId={projectId} />
+      <div>
+        <button onClick={() => router.push(`/project`)}>
+          プロジェクト選択画面に戻る
+        </button>
+
+        <button onClick={() => router.push(`/project/createProject`)}>
+          プロジェクトを作成する
+        </button>
+      </div>
+      <div>　　　　　　　</div>
       {user && (
         <ConferencePage user_clerk_id={user.id} project_id={projectId} />
       )}
