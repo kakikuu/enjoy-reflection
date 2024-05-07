@@ -46,20 +46,22 @@ const CreateProject: React.FC<{ user_clerk_id: string }> = ({
   return (
     <div>
       <h1>Create Project</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={projectTitle}
-          onChange={(e) => setProjectTitle(e.target.value)}
-          placeholder="Project title"
-        />
-        <button type="submit">Create</button>
-      </form>
+      {!projectID && (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={projectTitle}
+            onChange={(e) => setProjectTitle(e.target.value)}
+            placeholder="Project title"
+          />
+          <button type="submit">Create</button>
+        </form>
+      )}
       {projectID && (
         <div>
-          <p>Project created successfully!</p>
+          <p>プロジェクトを作成しました</p>
           <p>Project ID: {projectID}</p>
-          <p>Invite code: {inviteCode}</p>
+          <p>招待コード: {inviteCode}</p>
           <button onClick={() => router.push(`/project/${projectID}`)}>
             Go to project
           </button>

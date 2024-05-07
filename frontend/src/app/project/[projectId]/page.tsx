@@ -19,12 +19,16 @@ function ProjectPage() {
     <div>
       <UserButton />
       <ProjectDetail projectId={projectId} />
+      <div>
+        <button onClick={() => router.push(`/project`)}>
+          プロジェクト選択画面に戻る
+        </button>
 
-      <button
-        onClick={() => router.push(`/project/${projectId}/conferenceRecord`)}
-      >
-        プロジェクトを作成する
-      </button>
+        <button onClick={() => router.push(`/project/createProject`)}>
+          プロジェクトを作成する
+        </button>
+      </div>
+      <div>　　　　　　　</div>
       {user && (
         <div>
           <ViewPersonalReflections

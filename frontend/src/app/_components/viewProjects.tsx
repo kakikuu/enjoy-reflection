@@ -19,7 +19,7 @@ export const ViewProjects: React.FC<{ user_clerk_id: string }> = ({
         setProjects(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("プロジェクトの取得に失敗しました:", error);
-        setProjects([]); // エラー時も空の配列をセット
+        setProjects([]);
       }
     };
     fetchProjects();

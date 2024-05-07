@@ -26,7 +26,6 @@ var server = http.createServer(app);
 const wss = new Server({ server });
 wss.on("connection", function connection(ws) {
   console.log("クライアントがWebSocketで接続しました");
-  // ws.send("WebSocketサーバーに接続しました");
 });
 
 // Supabaseのリアルタイム変更を購読
@@ -35,7 +34,7 @@ supabaseClient
   .on(
     "postgres_changes",
     {
-      event: "*", // INSERT, UPDATE, DELETEのどれか
+      event: "*",
       schema: "public",
       table: "questions",
     },

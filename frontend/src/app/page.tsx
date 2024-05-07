@@ -10,7 +10,6 @@ export default function Page() {
   const router = useRouter();
   const { isSignedIn, user } = useUser();
 
-  // ユーザーがログインしていない場合はログインページにリダイレクト
   useEffect(() => {
     if (!isSignedIn) {
       router.push("/sign-in");
