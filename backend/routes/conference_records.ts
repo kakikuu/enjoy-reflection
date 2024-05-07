@@ -58,6 +58,53 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/conference_detail/:conference_id", async (req, res) => {
+  const { conference_id } = req.params;
+  console.log("ぼげぇ");
+
+  try {
+    // conference_idに基づいてquestionsを取得
+    const { data: questionsData, error: questionsError } = await supabaseClient
+      .from("questions")
+      .select("question_id, content") // contentは質問の内容を示すカラム名に変更してください（もし異なる場合）
+      .eq("conference_record_id", conference_id)
+      .select();
+
+    if (questionsError) throw questionsError;
+
+    // questionsDataからquestion_idのみを抽出
+    const questionIds = questionsData.map((question) => question.question_id);
+
+    // 取得したquestion_idに基づいてanswersのcontentを取得
+    const { data: answersData, error: answersError } = await supabaseClient
+      .from("answers")
+      .select("question_id, content") // contentは回答の内容を示すカラム名に変更してください（もし異なる場合）
+      .in("question_id", questionIds)
+      .select();
+
+    if (answersError) throw answersError;
+
+    const results = questionsData.map((question) => ({
+      question_id: question.question_id,
+      question_content: question.content,
+      answers: answersData
+        .filter((answer) => answer.question_id === question.question_id)
+        .map((answer) => answer.content),
+    }));
+
+    res.json({
+      message: "Questions and Answers retrieved successfully",
+      conference_id: conference_id,
+      results: results,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to retrieve data",
+      error: error.message,
+    });
+  }
+});
+
 router.post("/:personal_reflection_id/create", async (req, res) => {
   const { user_clerk_id, project_id, personal_reflection_id } = req.params;
   const { conference_title } = req.body;
