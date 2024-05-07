@@ -32,16 +32,19 @@ router.post("/", async (req, res) => {
     console.log("projectData", projectData);
 
     if (projectError) throw new Error(projectError.message);
-    if (!projectData) throw new Error("Project creation failed");
+    if (!projectData) throw new Error("Projects table insert failed");
 
     const project_id = projectData[0].project_id;
 
     const { data: projectUserData, error: projectUserError } =
-      await supabaseClient.from("created_projects").insert([
-        {
-          project_id: project_id,
-        },
-      ]);
+      await supabaseClient
+        .from("created_projects")
+        .insert([
+          {
+            project_id: project_id,
+          },
+        ])
+        .select();
     if (projectUserError) throw new Error(projectUserError.message);
     if (!projectUserData) throw new Error("Project creation failed");
 
@@ -63,6 +66,7 @@ router.post("/", async (req, res) => {
       project_id: project_id,
       invite_code: authCode,
     });
+    console.log("invitedProjectData", invitedProjectData);
   } catch (error) {
     console.error("Error:", error);
     res
@@ -72,32 +76,52 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  console.log("gettttt");
+  console.log("user_clerk_id", req.params.user_clerk_id);
   const { user_clerk_id } = req.params;
+
   try {
-    const { data: userData, error: userError } = await supabaseClient
+    // user_clerk_idに基づいてusersテーブルからユーザーを検索
+    let { data: userData, error: userError } = await supabaseClient
       .from("users")
       .select("user_id")
-      .eq("user_clerk_id", user_clerk_id);
+      .eq("user_clerk_id", user_clerk_id)
+      .select();
+    console.log("userData", userData);
+    if (userError) throw userError;
 
-    if (userError) throw new Error(userError.message);
-    if (!userData) throw new Error("User not found");
-    const user_id = userData[0].user_id;
+    let user_id;
 
-    // projectsテーブルからプロジェクトを取得
-    const { data: projectData, error: projectError } = await supabaseClient
-      .from("projects")
-      .select("*")
-      .eq("user_id", user_id);
+    // userDataが存在しなければ、新しいユーザーをusersテーブルに登録
+    if (userData.length === 0) {
+      let { data: newUser, error: newUserError } = await supabaseClient
+        .from("users")
+        .insert([{ user_clerk_id: user_clerk_id }])
+        .select();
 
-    console.log("projectData", projectData);
+      if (newUserError) throw newUserError;
 
-    if (projectError) throw new Error(projectError.message);
-    if (!projectData) throw new Error("Project not found");
+      user_id = newUser[0].user_id;
 
-    res.status(200).json(projectData);
+      // 新しいユーザーが作成されたため、関連するプロジェクトはない
+      res.status(200).json([]);
+    } else {
+      user_id = userData[0].user_id;
+      console.log("user_id", user_id);
+
+      // user_idに基づいてプロジェクトを取得
+      const { data: projectData, error: projectError } = await supabaseClient
+        .from("projects")
+        .select("*")
+        .eq("user_id", user_id)
+        .select();
+
+      if (projectError) throw projectError;
+
+      // 取得したプロジェクトデータをレスポンスとして返す
+      res.status(200).json(projectData);
+    }
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error:", error.message);
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });

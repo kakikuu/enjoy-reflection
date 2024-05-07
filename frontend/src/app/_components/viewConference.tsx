@@ -9,7 +9,9 @@ const ConferencePage = ({ user_clerk_id, project_id }) => {
   function clickMoveConference(conference_id: number) {
     console.log("clickMoveConference", project_id);
     // router.push の引数を修正しました
-    router.push(`/project/${project_id}/conferenceRecord/${conference_id}`);
+    router.push(
+      `/project/${project_id}/personalReflection/${personal_reflection_id}/conferenceRecord/${conference_id}`
+    );
   }
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const ConferencePage = ({ user_clerk_id, project_id }) => {
 
   return (
     <div>
-      <h1>Project Page for Project ID: {project_id}</h1>
+      <p>プロジェクトID:{project_id}</p>
       <ul>
         {conferenceRecords.length > 0 ? (
           conferenceRecords.map((id) => (
@@ -44,7 +46,7 @@ const ConferencePage = ({ user_clerk_id, project_id }) => {
             </li>
           ))
         ) : (
-          <p>No conference records found.</p>
+          <p>記者会見はまだ行われていません。</p>
         )}
       </ul>
     </div>

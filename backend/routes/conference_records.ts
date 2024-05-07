@@ -58,7 +58,52 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/:personal_reflection_id/create", async (req, res) => {
+  const { user_clerk_id, project_id, personal_reflection_id } = req.params;
+  const { conference_title } = req.body;
+
+  try {
+    const { data: userData, error: userError } = await supabaseClient
+      .from("users")
+      .select("user_id")
+      .eq("user_clerk_id", user_clerk_id);
+    console.log("userData", userData);
+
+    if (userError) throw new Error(userError.message);
+    if (!userData) throw new Error("User not found");
+    const user_id = userData[0].user_id;
+    // conference_records テーブルにデータを挿入
+    const { data, error } = await supabaseClient
+      .from("conference_records")
+      .insert([
+        {
+          conference_title: conference_title,
+          personal_reflection_id: personal_reflection_id,
+          project_id: project_id,
+          user_id: user_id,
+        },
+      ])
+      .select();
+
+    if (error) {
+      throw error;
+    }
+
+    console.log("data", data);
+    res.status(201).json({
+      message: "Conference created successfully",
+      conference_record_id: data[0].conference_record_id,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to create the conference",
+      error: error.message,
+    });
+  }
+});
+
+router.post("/begin", async (req, res) => {
+  // coference_titleを受け取って、conference_recordsテーブルにデータを挿入
   const { conference_id } = req.params;
   const invite_id = generateUniqueId(); // invite_id の生成
 

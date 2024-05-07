@@ -11,12 +11,16 @@ export const ViewProjects: React.FC<{ user_clerk_id: string }> = ({
 
   React.useEffect(() => {
     const fetchProjects = async () => {
-      const response = await fetch(
-        `http://localhost:3001/users/${user_clerk_id}/projects`
-      );
-      const data = await response.json();
-      setProjects(data);
-      console.log(data);
+      try {
+        const response = await fetch(
+          `http://localhost:3001/users/${user_clerk_id}/projects`
+        );
+        const data = await response.json();
+        setProjects(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error("プロジェクトの取得に失敗しました:", error);
+        setProjects([]); // エラー時も空の配列をセット
+      }
     };
     fetchProjects();
   }, [user_clerk_id]);

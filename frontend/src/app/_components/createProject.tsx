@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 const CreateProject: React.FC<{ user_clerk_id: string }> = ({
   user_clerk_id,
@@ -37,8 +36,8 @@ const CreateProject: React.FC<{ user_clerk_id: string }> = ({
       console.log("Project created:", result);
       setProjectID(result.project_id); // プロジェクトIDを状態にセット
       setInviteCode(result.invite_code); // 招待コードを状態にセット
-
-      router.push(`/project/${result.project_id}`); // プロジェクトページに遷移
+      // inputの値をリセット
+      setProjectTitle("");
     } catch (error) {
       console.error("Failed to create project:", error);
     }
@@ -61,6 +60,9 @@ const CreateProject: React.FC<{ user_clerk_id: string }> = ({
           <p>Project created successfully!</p>
           <p>Project ID: {projectID}</p>
           <p>Invite code: {inviteCode}</p>
+          <button onClick={() => router.push(`/project/${projectID}`)}>
+            Go to project
+          </button>
         </div>
       )}
     </div>
