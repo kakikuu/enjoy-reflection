@@ -10,7 +10,7 @@ let personalReflectionsRouter = require("./routes/personal_reflections.ts");
 let conferenceRecordsRouter = require("./routes/conference_records.ts");
 let questionsRouter = require("./routes/questions.ts");
 let answersRouter = require("./routes/answers.ts");
-let testRouter = require("./routes/test.ts");
+// let testRouter = require("./routes/test.ts");
 
 const dotenv = require("dotenv");
 

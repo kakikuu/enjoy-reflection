@@ -45,16 +45,16 @@ const CreateProject: React.FC<{ user_clerk_id: string }> = ({
 
   return (
     <div>
-      <h1>Create Project</h1>
+      <h1>プロジェクトを作成する</h1>
       {!projectID && (
         <form onSubmit={handleSubmit}>
           <input
             type="text"
             value={projectTitle}
             onChange={(e) => setProjectTitle(e.target.value)}
-            placeholder="Project title"
+            placeholder="プロジェクトタイトル"
           />
-          <button type="submit">Create</button>
+          <button type="submit">作成</button>
         </form>
       )}
       {projectID && (

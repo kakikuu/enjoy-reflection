@@ -31,6 +31,13 @@ function ProjectPage() {
       <div>　　　　　　　</div>
       {user && (
         <div>
+          <button
+            onClick={() =>
+              router.push(`/project/${projectId}/personalReflection`)
+            }
+          >
+            個人反省を行う
+          </button>
           <ViewPersonalReflections
             userClerkId={user.id}
             projectId={projectId}

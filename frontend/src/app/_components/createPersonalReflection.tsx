@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 // Propsの型定義
 interface ReflectionFormProps {
   user_clerk_id: string;
-  project_id: string;
+  project_id: string | string[];
 }
 
 const ReflectionForm: React.FC<ReflectionFormProps> = ({

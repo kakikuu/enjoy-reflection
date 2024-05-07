@@ -1,11 +1,16 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useUser, UserButton } from "@clerk/nextjs";
-import { ViewProjects } from "../_components/viewProjects";
+import { useParams } from "next/navigation";
+import ReflectionForm from "../../../_components/createPersonalReflection";
 
 export default function Page() {
   const { user } = useUser();
   const router = useRouter();
+  const params = useParams();
+
+  const projectId = params.projectId;
+  console.log(projectId);
 
   return (
     <div>
@@ -16,9 +21,10 @@ export default function Page() {
             <button onClick={() => router.push(`/project/createProject`)}>
               プロジェクトを作成する
             </button>
-            <ViewProjects user_clerk_id={user.id} />
+            <ReflectionForm user_clerk_id={user.id} project_id={projectId} />
           </>
         )}
+        <p className="text-lg">You are signed in</p>
       </div>
     </div>
   );
